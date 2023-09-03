@@ -1,9 +1,9 @@
-const fs = require('fs/promises');
-const { nanoid } = require('nanoid');
-const path = require('path');
+import fs from "fs/promises";
+import path from "path";
+import { nanoid } from "nanoid";
 
-const contactsPath = path.join(__dirname, 'db.json');
-
+// const contactsPath = path.join(__dirname, 'db.json'); common.js 
+const contactsPath  = path.resolve("models",  "contacts.json");// es6 modules
 const getContactsList = async () => {
   const contactsData = await fs.readFile(contactsPath);
   // кодування utf 8 можна не вказувти  json.parse вміє читати buffer
@@ -43,7 +43,7 @@ const addContact = async data => {
   return newContact;
 };
 
-module.exports = {
+export default {
   addContact,
   deleteContact,
   getContactById,
