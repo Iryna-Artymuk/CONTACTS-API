@@ -1,19 +1,51 @@
-// const fs = require('fs/promises')
+const fs = require('fs/promises');
+const { nanoid } = require('nanoid');
+const path = require('path');
 
-const listContacts = async () => {}
+const contactsPath = path.join(__dirname, 'db.json');
 
-const getContactById = async (contactId) => {}
+const getContactsList = async () => {
+  const contactsData = await fs.readFile(contactsPath);
+  // кодування utf 8 можна не вказувти  json.parse вміє читати buffer
+  return JSON.parse(contactsData);
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async contactId => {
+  const allContacts = await getContactsList();
+  const contact = allContacts.find(contact => contact.id === contactId);
 
-const addContact = async (body) => {}
+  return contact || null;
+};
 
-const updateContact = async (contactId, body) => {}
+const deleteContact = async contactId => {
+  const allContacts = await getContactsList();
+  const index = allContacts.findIndex(contact => contact.id === contactId);
+
+  if (index === -1) {
+    return null;
+  }
+  const [result] = allContacts.splice(index, 1);
+
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+  return result;
+};
+
+const addContact = async data => {
+  const allContacts = await getContactsList();
+  const newContact = {
+    id: nanoid(),
+    ...data,
+  };
+  allContacts.push(newContact);
+  // після додавання книги перезаписуємо json file
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+
+  return newContact;
+};
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
   addContact,
-  updateContact,
-}
+  deleteContact,
+  getContactById,
+  getContactsList,
+};
