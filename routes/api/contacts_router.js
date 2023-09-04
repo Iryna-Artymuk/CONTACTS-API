@@ -13,14 +13,15 @@ const contactAddSchema = Joi.object({
       minDomainSegments: 2,
       tlds: { allow: ['com', 'net', 'org'] },
     })
-    .message(' only allowed domain name .com .net .org '),
+    .message('only allowed domain name .com .net .org ')
+    .required(),
 
   phone: Joi.string()
     .regex(
       /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/
     )
     .message(
-      ' mobile number must have 10 digit  be valid, exemple (000)-000-0000 or (000)0000000 or   0000000000  '
+      ' mobile number must have 10 digit  be valid, exemple (000)-000-0000 or (000)0000000 or 0000000000 '
     )
     .required(),
 });
@@ -78,15 +79,12 @@ router.put('/:contactId', async (req, res, next) => {
     const { error } = validateResult;
 
     if (error) throw HttpError(422, error.message);
-    console.log(' normalisePhoneNumbe: ', normalisePhoneNumber);
 
     const updateContact = {
       ...req.body,
       phone: normalisePhoneNumber(req.body.phone),
     };
 
-    console.log(' req.body.phone: ', req.body.phone);
-    console.log(' updateContact: ', updateContact.phone);
     const result = await contactsService.updateContactById(
       contactId,
       updateContact
