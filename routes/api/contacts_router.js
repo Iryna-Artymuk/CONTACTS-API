@@ -6,15 +6,22 @@ import { HttpError } from '../../helpers/index.js';
 import { normalisePhoneNumber } from '../../helpers/index.js';
 
 const contactAddSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
+  name: Joi.string().min(3).max(30).required(),
 
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ['com', 'net'] },
-  }),
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ['com', 'net', 'org'] },
+    })
+    .message(' only allowed domain name .com .net .org '),
 
   phone: Joi.string()
-    .regex(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)
+    .regex(
+      /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/
+    )
+    .message(
+      ' mobile number must have 10 digit  be valid, exemple (000)-000-0000 or (000)0000000 or   0000000000  '
+    )
     .required(),
 });
 const router = express.Router(); // create router
@@ -64,6 +71,33 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+router.put('/:contactId', async (req, res, next) => {
+  const { contactId } = req.params;
+  try {
+    const validateResult = contactAddSchema.validate(req.body);
+    const { error } = validateResult;
+
+    if (error) throw HttpError(422, error.message);
+    console.log(' normalisePhoneNumbe: ', normalisePhoneNumber);
+
+    const updateContact = {
+      ...req.body,
+      phone: normalisePhoneNumber(req.body.phone),
+    };
+
+    console.log(' req.body.phone: ', req.body.phone);
+    console.log(' updateContact: ', updateContact.phone);
+    const result = await contactsService.updateContactById(
+      contactId,
+      updateContact
+    );
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.delete('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   try {
@@ -83,9 +117,5 @@ router.delete('/:contactId', async (req, res, next) => {
     next(error);
   }
 });
-
-// router.put('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
 
 export default router;

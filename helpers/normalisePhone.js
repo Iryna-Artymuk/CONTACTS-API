@@ -1,8 +1,12 @@
 import { phone } from 'phone';
 
 const normalisePhone = phoneNumber => {
-  return phone(phoneNumber, {
+  const UkrainianNumber = phone(phoneNumber, {
     country: 'Ukraine',
   }).phoneNumber;
+
+  return UkrainianNumber?UkrainianNumber: phoneNumber
+
+  
 };
 export default normalisePhone;

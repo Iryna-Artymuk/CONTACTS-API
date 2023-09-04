@@ -37,10 +37,20 @@ const addContact = async data => {
     ...data,
   };
   allContacts.push(newContact);
-  // після додавання книги перезаписуємо json file
+ 
   await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
 
   return newContact;
+};
+const updateContactById = async (id, data) => {
+  const allContacts = await getContactsList();
+  const index = allContacts.findIndex(contact => contact.id === id);
+  if (index === -1) {
+    return null;
+  }
+  allContacts[index] = { id, ...data };
+   await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+  return allContacts[index];
 };
 
 export default {
@@ -48,4 +58,5 @@ export default {
   deleteContactById,
   getContactById,
   getContactsList,
+  updateContactById,
 };
