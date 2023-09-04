@@ -1,7 +1,22 @@
 import express from 'express';
+import Joi from 'joi'; // бібліотека валідації
 
 import { contactsService } from '../../models/index.js';
 import { HttpError } from '../../helpers/index.js';
+import { normalisePhoneNumber } from '../../helpers/index.js';
+
+const contactAddSchema = Joi.object({
+  name: Joi.string().alphanum().min(3).max(30).required(),
+
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: { allow: ['com', 'net'] },
+  }),
+
+  phone: Joi.string()
+    .regex(/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/)
+    .required(),
+});
 const router = express.Router(); // create router
 
 router.get('/', async (req, res, next) => {
@@ -32,9 +47,22 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-// router.post('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
+router.post('/', async (req, res, next) => {
+  try {
+    const validateResult = contactAddSchema.validate(req.body);
+    const { error } = validateResult;
+
+    if (error) throw HttpError(422, error.message);
+    const result = await contactsService.addContact({
+      ...req.body,
+      phone: normalisePhoneNumber(req.body.phone),
+    });
+
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // router.delete('/:contactId', async (req, res, next) => {
 //   res.json({ message: 'template message' })
