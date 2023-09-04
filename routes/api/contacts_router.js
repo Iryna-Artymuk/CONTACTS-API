@@ -64,9 +64,25 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// router.delete('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
+router.delete('/:contactId', async (req, res, next) => {
+  const { contactId } = req.params;
+  try {
+    const result = await contactsService.deleteContactById(contactId);
+
+    if (!result) {
+      throw HttpError(
+        404,
+        `контакту з id:${contactId} не знайдено перевірте чи правильний id `
+      );
+    }
+
+    res.json({
+      message: ` Contact with id:${contactId} deleted successfully`,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 // router.put('/:contactId', async (req, res, next) => {
 //   res.json({ message: 'template message' })

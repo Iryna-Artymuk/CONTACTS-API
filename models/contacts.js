@@ -17,7 +17,7 @@ const getContactById = async contactId => {
   return contact || null;
 };
 
-const deleteContact = async contactId => {
+const deleteContactById = async contactId => {
   const allContacts = await getContactsList();
   const index = allContacts.findIndex(contact => contact.id === contactId);
 
@@ -45,7 +45,7 @@ const addContact = async data => {
 
 export default {
   addContact,
-  deleteContact,
+  deleteContactById,
   getContactById,
   getContactsList,
 };
