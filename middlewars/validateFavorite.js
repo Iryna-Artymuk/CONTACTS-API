@@ -2,7 +2,9 @@ import { HttpError } from '../helpers/index.js';
 import Joi from 'joi'; // бібліотека валідації
 
 const JoiFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean()
+    .required()
+    .messages({ 'any.required': 'missing field favorite' }),
 });
 const vadidateFavorite = (req, res, next) => {
   const validateResult = JoiFavoriteSchema.validate(req.body);

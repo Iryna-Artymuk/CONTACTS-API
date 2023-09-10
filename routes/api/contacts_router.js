@@ -27,6 +27,6 @@ router.patch(
   contactsControler.updateContactById
 );
 
-router.delete('/:contactId',isValidId , contactsControler.deleteContactById);
+router.delete('/:contactId', isValidId, contactsControler.deleteContactById);
 
 export default router;
