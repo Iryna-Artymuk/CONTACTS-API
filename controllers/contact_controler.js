@@ -70,7 +70,7 @@ const updateContactById = async (req, res, next) => {
 const deleteContactById = async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const result = await contactsService.deleteContactById(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
 
     if (!result) {
       throw HttpError(
@@ -91,5 +91,5 @@ export default {
   getContactById,
   addContact,
   updateContactById,
-  // deleteContactById,
+  deleteContactById,
 };
