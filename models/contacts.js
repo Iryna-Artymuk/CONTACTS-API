@@ -1,19 +1,62 @@
-// const fs = require('fs/promises')
+import fs from 'fs/promises';
+import path from 'path';
+import { nanoid } from 'nanoid';
 
-const listContacts = async () => {}
+// const contactsPath = path.join(__dirname, 'db.json'); common.js
+const contactsPath = path.resolve('models', 'contacts.json'); // es6 modules
+const getContactsList = async () => {
+  const contactsData = await fs.readFile(contactsPath);
+  // кодування utf 8 можна не вказувти  json.parse вміє читати buffer
+  return JSON.parse(contactsData);
+};
 
-const getContactById = async (contactId) => {}
+const getContactById = async contactId => {
+  const allContacts = await getContactsList();
+  const contact = allContacts.find(contact => contact.id === contactId);
 
-const removeContact = async (contactId) => {}
+  return contact || null;
+};
 
-const addContact = async (body) => {}
+const deleteContactById = async contactId => {
+  const allContacts = await getContactsList();
+  const index = allContacts.findIndex(contact => contact.id === contactId);
 
-const updateContact = async (contactId, body) => {}
+  if (index === -1) {
+    return null;
+  }
+  const [result] = allContacts.splice(index, 1);
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+  return result;
+};
+
+const addContact = async data => {
+  const allContacts = await getContactsList();
+  const newContact = {
+    id: nanoid(),
+    ...data,
+  };
+  allContacts.push(newContact);
+ 
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+
+  return newContact;
+};
+const updateContactById = async (id, data) => {
+  const allContacts = await getContactsList();
+  const index = allContacts.findIndex(contact => contact.id === id);
+  if (index === -1) {
+    return null;
+  }
+  allContacts[index] = { id, ...data };
+   await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+  return allContacts[index];
+};
+
+export default {
   addContact,
-  updateContact,
-}
+  deleteContactById,
+  getContactById,
+  getContactsList,
+  updateContactById,
+};
