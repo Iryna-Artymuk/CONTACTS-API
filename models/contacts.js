@@ -1,62 +1,54 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { nanoid } from 'nanoid';
+import { Schema, model } from 'mongoose';
 
-// const contactsPath = path.join(__dirname, 'db.json'); common.js
-const contactsPath = path.resolve('models', 'contacts.json'); // es6 modules
-const getContactsList = async () => {
-  const contactsData = await fs.readFile(contactsPath);
-  // кодування utf 8 можна не вказувти  json.parse вміє читати buffer
-  return JSON.parse(contactsData);
-};
+// -------mongoose  Contacts vadidation schema ---------last check before sendind to DB
 
-const getContactById = async contactId => {
-  const allContacts = await getContactsList();
-  const contact = allContacts.find(contact => contact.id === contactId);
+import { handelSchemsErrorStatus } from './hooks.js';
+// monggose  Schema це аналог схеми валідації joi відрізняється тим що іі не можна обійти так як вона є частиною моделі
+// в схемі детально описується як повинен виглядати обєкт в базі даних
+// створити обєкт де перелічити всі вимоги до поля
+// -------mongoose  vadidation schema ---------last check before sendind to DB
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'], // поле є обовязковим
+    },
 
-  return contact || null;
-};
+    email: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      unique: true,
+      match: [
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        'Please fill a valid email address',
+      ],
+      required: [true, 'Set email for contact'],
+    },
+    phone: {
+      type: String,
+      match:
+        /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/, // значення має відповідати регуряреому виразу
+      required: [true, 'Set   phone for contact'],
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const deleteContactById = async contactId => {
-  const allContacts = await getContactsList();
-  const index = allContacts.findIndex(contact => contact.id === contactId);
+// якщо валідація по mongoose schema не пройдена mongoose викидає помилку  спрацьовує catch з контролера і викликає функцію обробки помилок
+//---ПОМИЛКА -- mongoose не присвою помилці статус тому всі помилки мають статус 500 і не будуть зрозумілі на фронтенді
+//---РІШЕННЯ---  викликати спеціальний mongoose hook
+// це функція яка буде викликана перед тим як помилка перейде в блок catch ій присвоїться статус і спрацює функція обробки помилок з app.js
 
-  if (index === -1) {
-    return null;
-  }
-  const [result] = allContacts.splice(index, 1);
+contactSchema.post('save', handelSchemsErrorStatus);
 
-  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
-  return result;
-};
+// створюєм екземпляр класу йому треба передати назву колекції в однині з якою буде працювати цей екземпляр і створену схему
+// експортуєм його для використання в контролерах
 
-const addContact = async data => {
-  const allContacts = await getContactsList();
-  const newContact = {
-    id: nanoid(),
-    ...data,
-  };
-  allContacts.push(newContact);
- 
-  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+const Contact = model('contact', contactSchema);
 
-  return newContact;
-};
-const updateContactById = async (id, data) => {
-  const allContacts = await getContactsList();
-  const index = allContacts.findIndex(contact => contact.id === id);
-  if (index === -1) {
-    return null;
-  }
-  allContacts[index] = { id, ...data };
-   await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
-  return allContacts[index];
-};
-
-export default {
-  addContact,
-  deleteContactById,
-  getContactById,
-  getContactsList,
-  updateContactById,
-};
+export default Contact;
