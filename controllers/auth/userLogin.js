@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 
 import asyncHandler from '../../decorators/acyncHandler.js';
 import User from '../../models/users/Users.js';
+import HttpError from '../../helpers/httpError.js';
 
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
