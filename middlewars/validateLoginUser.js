@@ -5,21 +5,18 @@ import Joi from 'joi'; // бібліотека валідації
 
 const emailRegExpr = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-const JoiRegisterUserSchema = Joi.object({
-  name: Joi.string().required().min(3).messages({
-    'any.required': ` frontend validation error check again  if you  added    name `,
-  }),
+const JoiLoginUserSchema = Joi.object({
   email: Joi.string().required().pattern(emailRegExpr).messages({
     'any.required': `validation error check again  if you  added   email`,
   }),
   password: Joi.string().required().min(6).messages({
     'string.min':
       'Frontend validation error  password should be min 6 characters..',
-    'any.required': ` validation error check again  if you  added   password`,
+    'any.required': `validation error check again  if you  added   password`,
   }),
 });
-const validateRegisterUser = (req, res, next) => {
-  const validateResult = JoiRegisterUserSchema.validate(req.body);
+const validateLoginUser = (req, res, next) => {
+  const validateResult = JoiLoginUserSchema.validate(req.body);
   // console.log('validateResult: ', validateResult);
   const { error } = validateResult;
 
@@ -29,4 +26,4 @@ const validateRegisterUser = (req, res, next) => {
   next();
 };
 
-export default validateRegisterUser;
+export default validateLoginUser;

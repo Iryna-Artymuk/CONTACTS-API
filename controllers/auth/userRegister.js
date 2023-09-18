@@ -4,7 +4,7 @@ import { HttpError } from '../../helpers/index.js';
 import asyncHandler from '../../decorators/acyncHandler.js';
 import User from '../../models/users/Users.js';
 
-const registerNewUser = async (req, res) => {
+const userRegister = async (req, res) => {
   // check if user already exist
   const { email, password } = req.body;
 
@@ -29,4 +29,4 @@ const registerNewUser = async (req, res) => {
   });
 };
 
-export default asyncHandler(registerNewUser);
+export default asyncHandler(userRegister);

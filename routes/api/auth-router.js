@@ -1,15 +1,18 @@
 import express from 'express';
 import {
-  registerNewUser,
   userLogin,
   userLogout,
+  userRegister,
 } from '../../controllers/auth/index.js';
-import validateRegisterUser from '../../middlewars/validateRegisterUser.js';
+import {
+  validateRegisterUser,
+  validateLoginUser,
+} from '../../middlewars/index.js';
 
 const router = express.Router(); // create router
 
-router.post('/users/register', validateRegisterUser, registerNewUser);
-router.post('/users/login', userLogin);
+router.post('/users/register', validateRegisterUser, userRegister);
+router.post('/users/login', validateLoginUser, userLogin);
 router.delete('/users/logout', userLogout);
 
 export default router;
