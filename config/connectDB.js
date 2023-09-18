@@ -5,7 +5,7 @@ import dotenv from 'dotenv';
 import colors from 'colors';
 
 const configPath = path.resolve('./', 'config', '.env');
-console.log('configPath: ', configPath);
+// console.log('configPath: ', configPath);
 dotenv.config({ path: configPath }); // додає змінні з файлу env до глобального обєкту process.env
 
 const { DB_HOST } = process.env;

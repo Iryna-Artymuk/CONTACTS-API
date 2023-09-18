@@ -7,6 +7,7 @@ import {
 } from '../../middlewars/index.js';
 import {
   addContact,
+  deleteContactById,
   getAllContacts,
   getContactById,
   updateContactById,
@@ -28,6 +29,6 @@ router.patch(
   updateContactById
 );
 
-// router.delete('/:contactId', isValidId, deleteContactById);
+router.delete('/:contactId', isValidId, deleteContactById);
 
 export default router;

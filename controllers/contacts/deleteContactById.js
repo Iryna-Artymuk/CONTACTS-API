@@ -1,4 +1,4 @@
-import asyncHandler from '../../decorators/acyncHandler';
+import asyncHandler from '../../decorators/acyncHandler.js';
 import Contact from '../../models/contacts.js';
 
 const deleteContactById = async (req, res, next) => {
@@ -18,4 +18,4 @@ const deleteContactById = async (req, res, next) => {
   });
 };
 
-export default asyncHandler(updateContactById);
+export default asyncHandler(deleteContactById);

@@ -4,6 +4,8 @@ import cors from "cors";
 
 
 import contactsRouter from "./routes/api/contacts_router.js"
+import authRouter from './routes/api/auth-router.js';
+
 
 const app = express()
 
@@ -15,6 +17,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 app.use('/api/contacts', contactsRouter)
+app.use('/api/auth', authRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: ' Page not found' })
