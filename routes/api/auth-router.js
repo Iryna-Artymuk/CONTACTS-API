@@ -7,8 +7,8 @@ import {
 
 const router = express.Router(); // create router
 
-router.post('/register', registerNewUser);
-router.post('/login', userLogin);
-router.delete('/logout', userLogout);
+router.post('/users/register', registerNewUser);
+router.post('/users/login', userLogin);
+router.delete('/users/logout', userLogout);
 
 export default router;

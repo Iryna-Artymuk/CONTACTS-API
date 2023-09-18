@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 
+import { HttpError } from '../../helpers/index.js';
 import asyncHandler from '../../decorators/acyncHandler.js';
 import User from '../../models/users/Users.js';
 
