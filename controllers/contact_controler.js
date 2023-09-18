@@ -6,29 +6,7 @@ import { normalisePhoneNumber } from '../helpers/index.js';
 
 
 
-const updateContactById = async (req, res, next) => {
-  const { contactId } = req.params;
 
-  try {
-    const updateContact = {
-      ...req.body,
-      // phone: normalisePhoneNumber(req.body.phone),
-    };
-
-    const result = await Contact.findOneAndUpdate(
-      { _id: contactId }, // id
-      { ...updateContact }, // те що треба обновити
-      {
-        new: true, // повернути оновлений контакт
-        runValidators: true, // застосувати mongoose схему валідації
-      }
-    );
-
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
 
 const deleteContactById = async (req, res, next) => {
   const { contactId } = req.params;

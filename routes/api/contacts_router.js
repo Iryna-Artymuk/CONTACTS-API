@@ -9,6 +9,7 @@ import {
   addContact,
   getAllContacts,
   getContactById,
+  updateContactById,
 } from '../../controllers/contacts/index.js';
 
 const router = express.Router(); // create router
@@ -19,13 +20,13 @@ router.get('/:contactId', isValidId, getContactById);
 
 router.post('/', vadidateAddContact, addContact);
 
-// router.put('/:contactId', isValidId, vadidateAddContact, updateContactById);
-// router.patch(
-//   '/:contactId/favorite',
-//   isValidId,
-//   vadidateFavorite,
-//   updateContactById
-// );
+router.put('/:contactId', isValidId, vadidateAddContact, updateContactById);
+router.patch(
+  '/:contactId/favorite',
+  isValidId,
+  vadidateFavorite,
+  updateContactById
+);
 
 // router.delete('/:contactId', isValidId, deleteContactById);
 
