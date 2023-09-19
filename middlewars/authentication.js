@@ -25,15 +25,15 @@ const authentication = async (req, res, next) => {
     return next(HttpError(401, `user with ID: ${id} not found in DB`));
   }
 
-  const existUser = await User.findById(id);
-  console.log(' existUser: ', existUser);
+  const currenttUser = await User.findById(id);
+  console.log('currenttUser : ', currenttUser);
 
   if (!currenttUser || !token) {
     return next(HttpError(401, 'Not authorized'));
   }
-  // add existuser to  request objectFit:
+  // add existuser to  request object
 
-  req.user = currenttUser ;
+  req.user = currenttUser;
 
   next();
 };

@@ -33,7 +33,9 @@ const userLogin = async (req, res) => {
   // update token in DB user:
   // sent respond
 
-  await User.findByIdAndUpdate(user._id, { token, subscription: 'starter' });
+  await User.findByIdAndUpdate(user._id, 
+    { token,
+     subscription: 'starter' });
   res.json({ token, email: user.email, subscription: 'starter' });
 };
 export default asyncHandler(userLogin);
