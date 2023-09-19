@@ -26,7 +26,6 @@ const authentication = async (req, res, next) => {
   }
 
   const currenttUser = await User.findById(id);
-  console.log('currenttUser : ', currenttUser);
 
   if (!currenttUser || !token) {
     return next(HttpError(401, 'Not authorized'));
