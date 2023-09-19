@@ -5,7 +5,7 @@ const JoiSubscriptioneSchema = Joi.string()
   .valid('starter', 'pro', 'business')
   .required()
   .messages({
-    // 'any.required': 'missing field subscription',
+    'any.required': 'missing field subscription',
     'any.only': `validation error should be a one  of  starte, pro, business `,
   });
 
