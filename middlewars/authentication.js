@@ -10,8 +10,8 @@ const authentication = async (req, res, next) => {
   //   console.log('authorization : ', authorization);
 
   const [bearer, token] = authorization?.split(' ');
-  if (bearer !== 'Bearer') {
-    return next(HttpError(401));
+  if (bearer !== 'Bearer' || !token) {
+    return next(HttpError(401, 'no token'));
   }
 
   // verify token

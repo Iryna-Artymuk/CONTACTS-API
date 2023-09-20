@@ -31,11 +31,10 @@ const userLogin = async (req, res) => {
   const { JWT_SECRET_KEY } = process.env;
   const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: '23h' });
   // update token in DB user:
-  // sent respond
 
-  await User.findByIdAndUpdate(user._id, 
-    { token,
-     subscription: 'starter' });
+  await User.findByIdAndUpdate(user._id, { token, subscription: 'starter' });
+
+  // sent respond
   res.json({ token, email: user.email, subscription: 'starter' });
 };
 export default asyncHandler(userLogin);
