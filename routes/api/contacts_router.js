@@ -1,32 +1,35 @@
 import express from 'express';
 
-import contactsControler from '../../controllers/contact_controler.js';
 import {
   vadidateAddContact,
   isValidId,
   vadidateFavorite,
+  authentication,
 } from '../../middlewars/index.js';
+import {
+  addContact,
+  deleteContactById,
+  getAllContacts,
+  getContactById,
+  updateContactById,
+} from '../../controllers/contacts/index.js';
+
 const router = express.Router(); // create router
 
-router.get('/', contactsControler.getAllContacts);
+router.get('/', authentication,getAllContacts);
 
-router.get('/:contactId', isValidId, contactsControler.getContactById);
+router.get('/:contactId', authentication,isValidId, getContactById);
 
-router.post('/', vadidateAddContact, contactsControler.addContact);
+router.post('/', authentication,vadidateAddContact, addContact);
 
-router.put(
-  '/:contactId',
-  isValidId,
-  vadidateAddContact,
-  contactsControler.updateContactById
-);
+router.put('/:contactId', authentication,isValidId, vadidateAddContact, updateContactById);
 router.patch(
   '/:contactId/favorite',
   isValidId,
   vadidateFavorite,
-  contactsControler.updateContactById
+  updateContactById
 );
 
-router.delete('/:contactId', isValidId, contactsControler.deleteContactById);
+router.delete('/:contactId', authentication,isValidId, deleteContactById);
 
 export default router;

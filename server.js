@@ -1,19 +1,13 @@
 import app from './app.js';
-import mongoose from 'mongoose';
 
 import dotenv from 'dotenv';
 
-dotenv.config(); // додає змінні з файлу env до глобального обєкту process.env
-const { DB_HOST } = process.env;
+import path from 'path';
+import connectDB from './config/connectDB.js';
+const { PORT } = process.env;
+// console.log('PORT : ', PORT);
 
-mongoose
-  .connect(DB_HOST)
-  .then(() =>
-    app.listen(4000, () =>
-      console.log('Server running sucsesfully connect to DB  my_contacts')
-    )
-  )
-  .catch(error => {
-    console.log('can not connect to DB ');
-    process.exit(1); // глобальний обєкт який закриває всі запущені процеси
-  });
+await connectDB();
+app.listen(PORT, () => {
+  console.log(`Server is running on ${PORT}`.bold.green);
+});
