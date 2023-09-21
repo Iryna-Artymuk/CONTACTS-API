@@ -29,6 +29,12 @@ router.patch(
   vadidateFavorite,
   updateContactById
 );
+router.patch(
+  '/:contactId/avatars',
+  isValidId,
+  vadidateFavorite,
+  updateContactById
+);
 
 router.delete('/:contactId', authentication,isValidId, deleteContactById);
 

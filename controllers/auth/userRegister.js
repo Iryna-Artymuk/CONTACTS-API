@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import gravatar from 'gravatar';
 
 import { HttpError } from '../../helpers/index.js';
 import asyncHandler from '../../decorators/acyncHandler.js';
@@ -20,12 +21,15 @@ const userRegister = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, salt);
   console.log('hashPassword : ', hashPassword);
+
+  const gravatarURL = gravatar.url(email);
   // make req to DB to creat new user
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
     name: newUser.name,
     email: newUser.email,
+    avatarURL: gravatarURL,
   });
 };
 
