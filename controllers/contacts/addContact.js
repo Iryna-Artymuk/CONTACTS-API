@@ -9,12 +9,12 @@ const addContact = async (req, res, next) => {
   const { email } = req.body;
   const { _id: ownerId } = user;
   const gravatarURL = gravatar.url(email);
-  console.log('gravatarURL : ', gravatarURL);
 
   const result = await Contact.create({
     ...req.body,
     owner: ownerId,
     phone: normalisePhoneNumber(req.body.phone),
+    avatarURL: gravatarURL,
   });
 
   res.status(201).json(result);
