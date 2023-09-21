@@ -24,7 +24,7 @@ router.patch('/users', authentication, vadidateSubscription, updateUser);
 router.patch(
   '/users/avatars',
   authentication,
-  upload.single('avatarURL'),
+  upload.single('avatar'),
   updateAvatar
 );
 
