@@ -24,12 +24,16 @@ const userRegister = async (req, res) => {
 
   const gravatarURL = gravatar.url(email);
   // make req to DB to creat new user
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL: gravatarURL,
+  });
 
   res.status(201).json({
     name: newUser.name,
     email: newUser.email,
-    avatarURL: gravatarURL,
+    avatarURL: newUser.avatarURL,
   });
 };
 
