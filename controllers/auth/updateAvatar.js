@@ -29,42 +29,60 @@ const updateAvatar = async (req, res, next) => {
   });
   // save savePath to database
 
-  const avatarURL = path.join('avatars', filename); // path to file in DB it should be relating to server adress other part of path we add in app.js when allows static file
+  const newAvatarURL = path.join('avatars', filename); // path to file in DB it should be relating to server adress other part of path we add in app.js when allows static file
   // const result = await User.findOneAndUpdate(
   //   { _id: user.id }, // id
-  //   { avatarURL }, // те що треба обновити буде в req.body
+  //   { avatarURL: newAvatarURL  }, // те що треба обновити буде в req.body
   //   {
   //     new: true, // повернути оновлений контакт
   //     runValidators: true, // застосувати mongoose схему валідації
   //   }
   //       })
 
-  const olduserAvatar = await User.findOne({ _id: user.id });
+  const { avatarURL: oldAvatartUrl } = await User.findOne({ _id: user.id });
+
+  // update avatartURL in DB
   const result = await User.findByIdAndUpdate(
     user.id,
-    { avatarURL },
+    { avatarURL:newAvatarURL},
     {
       new: true, // повернути оновлений контакт
       runValidators: true, // застосувати mongoose схему валідації
     }
-  );
+    );
 
-  console.log('olduserAvatar.avatar: ', olduserAvatar.avatarURL);
 
-  fs.unlink('./public/images/' + olduserAvatar.avatarURL, function (err) {
-    if (err && err.code == 'ENOENT') {
-      // file doens't exist
-      console.info("File doesn't exist, won't remove it.");
-    } else if (err) {
-      // other errors, e.g. maybe we don't have enough permission
-      console.error('Error occurred while trying to remove file');
-    } else {
-      console.info(`removed`);
+  const oldAvatartUrlPath = path.resolve('public', 'images', oldAvatartUrl);
+
+  // Check if the file exists in the current directoryna and delete old avatar
+  async function deleteOldAvatar(oldAvatartUrlPath) {
+    try {
+      await fs.access(oldAvatartUrlPath);
+      // return true;
+      fs.unlink('./public/images/' + oldAvatartUrl, function (err) {
+        if (err && err.code == 'ENOENT') {
+          // file doens't exist
+          console.info("File doesn't exist, won't remove it.");
+        } else if (err) {
+          // other errors, e.g. maybe we don't have enough permission
+          console.error('Error occurred while trying to remove file');
+        } else {
+          console.info(`removed`);
+        }
+      });
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        // return false;
+        console.info(` cant remove old avatart`);
+      } else {
+        throw err;
+      }
     }
-  });
- 
+  }
 
-  res.status(200).json({ avatarURL: avatarURL });
+  deleteOldAvatar(oldAvatartUrlPath);
+
+  res.status(200).json({ avatarURL: newAvatarURL });
 };
 
 export default asyncHandler(updateAvatar);
