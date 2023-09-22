@@ -4,7 +4,6 @@ import Jimp from 'jimp';
 
 import asyncHandler from '../../decorators/acyncHandler.js';
 import User from '../../models/users/Users.js';
-import HttpError from '../../helpers/httpError.js';
 
 const updateAvatar = async (req, res, next) => {
   const { user, file } = req;
@@ -31,14 +30,39 @@ const updateAvatar = async (req, res, next) => {
   // save savePath to database
 
   const avatarURL = path.join('avatars', filename); // path to file in DB it should be relating to server adress other part of path we add in app.js when allows static file
-  const result = await User.findOneAndUpdate(
-    { _id: user.id }, // id
-    { avatarURL }, // те що треба обновити буде в req.body
+  // const result = await User.findOneAndUpdate(
+  //   { _id: user.id }, // id
+  //   { avatarURL }, // те що треба обновити буде в req.body
+  //   {
+  //     new: true, // повернути оновлений контакт
+  //     runValidators: true, // застосувати mongoose схему валідації
+  //   }
+  //       })
+
+  const olduserAvatar = await User.findOne({ _id: user.id });
+  const result = await User.findByIdAndUpdate(
+    user.id,
+    { avatarURL },
     {
       new: true, // повернути оновлений контакт
       runValidators: true, // застосувати mongoose схему валідації
     }
   );
+
+  console.log('olduserAvatar.avatar: ', olduserAvatar.avatarURL);
+
+  fs.unlink('./public/images/' + olduserAvatar.avatarURL, function (err) {
+    if (err && err.code == 'ENOENT') {
+      // file doens't exist
+      console.info("File doesn't exist, won't remove it.");
+    } else if (err) {
+      // other errors, e.g. maybe we don't have enough permission
+      console.error('Error occurred while trying to remove file');
+    } else {
+      console.info(`removed`);
+    }
+  });
+ 
 
   res.status(200).json({ avatarURL: avatarURL });
 };
