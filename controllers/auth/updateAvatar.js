@@ -12,13 +12,14 @@ const updateAvatar = async (req, res, next) => {
   // path to folder where to save file permanent
   const avatarPath = path.resolve('public', 'images', 'avatars');
 
-  // new path including filename
+  // new path including filename in public folder
   const newPath = path.join(avatarPath, filename);
 
-  // transfer file to permanent folder
+
+  // transfer file from temp  to public folder
   await fs.rename(oldPath, newPath);
 
-  // resise file in temp folder
+  // resise file in public folder
   Jimp.read(newPath, function (err, image) {
     try {
       if (err) throw err;
@@ -27,32 +28,25 @@ const updateAvatar = async (req, res, next) => {
       next(error);
     }
   });
-  // save savePath to database
-
+ 
   const newAvatarURL = path.join('avatars', filename); // path to file in DB it should be relating to server adress other part of path we add in app.js when allows static file
-  // const result = await User.findOneAndUpdate(
-  //   { _id: user.id }, // id
-  //   { avatarURL: newAvatarURL  }, // те що треба обновити буде в req.body
-  //   {
-  //     new: true, // повернути оновлений контакт
-  //     runValidators: true, // застосувати mongoose схему валідації
-  //   }
-  //       })
-
+ 
+  // get old avatar url
   const { avatarURL: oldAvatartUrl } = await User.findOne({ _id: user.id });
+  const oldAvatartUrlPath = path.resolve('public', 'images', oldAvatartUrl);
 
-  // update avatartURL in DB
+
+  // update new  avatartURL in DB
   const result = await User.findByIdAndUpdate(
-    user.id,
-    { avatarURL:newAvatarURL},
+    user._id,
+    { avatarURL: newAvatarURL },
     {
       new: true, // повернути оновлений контакт
       runValidators: true, // застосувати mongoose схему валідації
     }
-    );
+  );
 
-
-  const oldAvatartUrlPath = path.resolve('public', 'images', oldAvatartUrl);
+ 
 
   // Check if the file exists in the current directoryna and delete old avatar
   async function deleteOldAvatar(oldAvatartUrlPath) {
@@ -73,7 +67,7 @@ const updateAvatar = async (req, res, next) => {
     } catch (err) {
       if (err.code === 'ENOENT') {
         // return false;
-        console.info(` cant remove old avatart`);
+        console.info(` won't  remove old avatart maybe it is not exist `);
       } else {
         throw err;
       }
