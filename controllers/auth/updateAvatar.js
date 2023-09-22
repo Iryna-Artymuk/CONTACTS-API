@@ -1,12 +1,12 @@
 import path from 'path';
 import fs from 'fs/promises';
+import Jimp from 'jimp';
 
 import asyncHandler from '../../decorators/acyncHandler.js';
 import User from '../../models/users/Users.js';
+import HttpError from '../../helpers/httpError.js';
 
-const updateAvatar = async (req, res) => {
-  // const { subscription } = req.query;
-
+const updateAvatar = async (req, res, next) => {
   const { user, file } = req;
 
   const { path: oldPath, filename } = file;
@@ -18,6 +18,17 @@ const updateAvatar = async (req, res) => {
 
   // transfer file to permanent folder
   await fs.rename(oldPath, newPath);
+
+  // resise file in temp folder
+  Jimp.read(newPath, function (err, image) {
+    try {
+      if (err) throw err;
+      image.resize(250, 250).quality(50).write(newPath);
+    } catch (error) {
+      next(error);
+    }
+  });
+  // save savePath to database
 
   const avatarURL = path.join('avatars', filename); // path to file in DB it should be relating to server adress other part of path we add in app.js when allows static file
   const result = await User.findOneAndUpdate(
