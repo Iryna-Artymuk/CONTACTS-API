@@ -20,7 +20,7 @@ const userRegister = async (req, res) => {
   const salt = await bcrypt.genSalt(10);
 
   const hashPassword = await bcrypt.hash(password, salt);
-  console.log('hashPassword : ', hashPassword);
+  // console.log('hashPassword : ', hashPassword);
 
   const gravatarURL = gravatar.url(email);
   // make req to DB to creat new user

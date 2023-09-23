@@ -9,6 +9,7 @@ const updateAvatar = async (req, res, next) => {
   const { user, file } = req;
 
   const { path: oldPath, filename } = file;
+
   // path to folder where to save file permanent
   const avatarPath = path.resolve('public', 'images', 'avatars');
 
@@ -29,7 +30,8 @@ const updateAvatar = async (req, res, next) => {
     }
   });
  
-  const newAvatarURL = path.join('avatars', filename); // path to file in DB it should be relating to server adress other part of path we add in app.js when allows static file
+  // path to file in DB it should be relating to server adress other part of path we add in app.js when allows static file
+  const newAvatarURL = path.join('avatars', filename); 
  
   // get old avatar url
   const { avatarURL: oldAvatartUrl } = await User.findOne({ _id: user.id });
@@ -47,7 +49,6 @@ const updateAvatar = async (req, res, next) => {
   );
 
  
-
   // Check if the file exists in the current directoryna and delete old avatar
   async function deleteOldAvatar(oldAvatartUrlPath) {
     try {
