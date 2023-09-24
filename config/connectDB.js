@@ -12,7 +12,7 @@ const { DB_HOST } = process.env;
 
 
 
-const connectDB = async () => {
+const connectDB = async (DB_HOST) => {
   try {
     const DB = await connect(DB_HOST);
     // console.log('DB : ', DB);
