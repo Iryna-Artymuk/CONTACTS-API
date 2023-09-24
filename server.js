@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import path from 'path';
 import connectDB from './config/connectDB.js';
 const { PORT } = process.env;
+
+
 // console.log('PORT : ', PORT);
 
 await connectDB();

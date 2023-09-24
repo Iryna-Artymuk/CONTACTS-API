@@ -1,23 +1,28 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 
-import app from '../../app.js';
+import app from '../../app';
 
 // import User from '../../models/users/Users.js';
 
-const { DB_HOST_TEST, PORT } = process.env;
-
+const { PORT } = process.env;
+const DB_HOST_TEST =
+  'mongodb+srv://Ira_Art:6PfXcX0yndb6EXh4@cluster0.mftd0fj.mongodb.net/my_contacts_test?retryWrites=true&w=majority';
 describe('test sigIn route', () => {
   let server = null;
   beforeAll(async () => {
-    await mongoose.connect(DB_HOST_TEST);
+    await mongoose.connect(DB_HOST_TEST, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     server = app.listen(PORT);
+
     const signupData = {
       username: 'Iryna',
       email: 'iryna@ukr.net',
       password: '123456',
     };
-    await request(app).post('/users/register').send(signupData);
+    await request(app).post('/api/contacts/users/register').send(signupData);
   });
 
   afterAll(async () => {
@@ -35,7 +40,7 @@ describe('test sigIn route', () => {
       password: '123456',
     };
     const { statusCode, body } = await request(app)
-      .post('/users/login')
+      .post('/api/contacts/users/login')
       .send(signInData);
     expect(statusCode).toBe(200);
     expect(body.email).toBe(signInData.email);
