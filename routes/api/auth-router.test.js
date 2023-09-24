@@ -22,7 +22,7 @@ describe('test sigIn route', () => {
       email: 'iryna@ukr.net',
       password: '123456',
     };
-    await request(app).post('/api/contacts/users/register').send(signupData);
+    await request(app).post('/api/auth/users/register').send(signupData);
   });
 
   afterAll(async () => {
@@ -40,7 +40,7 @@ describe('test sigIn route', () => {
       password: '123456',
     };
     const { statusCode, body } = await request(app)
-      .post('/api/contacts/users/login')
+      .post('/api/auth/users/login')
       .send(signInData);
     expect(statusCode).toBe(200);
     expect(body.email).toBe(signInData.email);
