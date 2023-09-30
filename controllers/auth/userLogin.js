@@ -13,7 +13,8 @@ const userLogin = async (req, res) => {
   if (!user) {
     throw HttpError(401, `User with  emais ${email} not found `);
   }
-
+  // якщо пошту не підтверджено викинути помилку
+  if (!user.verify) throw HttpError(401, ' you have to verify your email');
   // compare DB password with pasword from frontend
 
   const comparePassword = await bcrypt.compare(password, user.password);

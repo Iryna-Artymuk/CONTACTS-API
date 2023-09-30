@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import gravatar from 'gravatar';
 import { nanoid } from 'nanoid';
 
-import { HttpError,sendEmail} from '../../helpers/index.js';
+import { HttpError, sendEmail } from '../../helpers/index.js';
 import asyncHandler from '../../decorators/acyncHandler.js';
 import User from '../../models/users/Users.js';
 
@@ -77,7 +77,7 @@ const userRegister = async (req, res) => {
     html: htmlToSend2,
   };
   sendEmail(dataToSend1);
-  // sendEmail(dataToSend2);
+  sendEmail(dataToSend2);
   // send response to frontend
   res.status(201).json({
     name: newUser.name,
