@@ -2,7 +2,7 @@ import multer from 'multer';
 import path from 'path';
 
 // multer config indicate where to store file and wich name to use
-const destination = path.resolve('tempFiles'); // path to  tempFiles folder from  project root where to save file before controller function
+const destination = path.resolve('temp'); // path to  tempFiles folder from  project root where to save file before controller function
 
 const storage = multer.diskStorage({
   destination,

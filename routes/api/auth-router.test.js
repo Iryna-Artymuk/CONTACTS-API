@@ -7,9 +7,7 @@ import User from '../../models/users/Users.js';
 
 // import User from '../../models/users/Users.js';
 
-const { PORT } = process.env;
-const DB_HOST_TEST =
-  'mongodb+srv://Ira_Art:6PfXcX0yndb6EXh4@cluster0.mftd0fj.mongodb.net/my_contacts_test?retryWrites=true&w=majority';
+const { PORT, DB_HOST_TEST } = process.env;
 
 //-----register test-------
 
@@ -80,4 +78,14 @@ describe('test sigIn route', () => {
     expect(typeof body.subscription).toBe('string');
     expect(typeof body.token).toBe('string');
   });
+  // test('test sigin with incorrect data', async () => {
+  //   const signInData = {
+  //     email: 'iryna_2@ukr.net',
+  //     password: '123456',
+  //   };
+
+  //  const user =  await User.findOne({ email: signInData.email });
+  //   console.log('user : ', user);
+  // expect( () =>  User.findOne({ email: signInData.email })).toThrow(`User with  emais ${signInData.email} not found `)
+  // });
 });
