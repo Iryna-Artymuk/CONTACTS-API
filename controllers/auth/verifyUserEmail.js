@@ -1,5 +1,6 @@
 import User from '../../models/users/Users.js';
 import asyncHandler from '../../decorators/acyncHandler.js';
+import HttpError from '../../helpers/httpError.js';
 const verifyUserEmail = async (req, res) => {
   // беремо  код верифікації  з рядка запиту і
 
