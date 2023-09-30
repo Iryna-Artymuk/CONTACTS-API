@@ -3,7 +3,7 @@ import Joi from 'joi'; // бібліотека валідації
 
 const JoiSubscriptioneSchema = Joi.string()
   .valid('starter', 'pro', 'business')
-  .required()
+
   .messages({
     'any.required': 'missing field subscription',
     'any.only': `validation error should be a one  of  starte, pro, business `,
@@ -11,7 +11,8 @@ const JoiSubscriptioneSchema = Joi.string()
 
 const vadidateSubscription = (req, _, next) => {
   console.log('vadidateSubscription');
-  const { subscription } = req.query;
+  const { subscription } = req.body;
+  console.log(' subscription : ', subscription);
 
   const validateResult = JoiSubscriptioneSchema.validate(subscription);
   // console.log('validateResult: ', validateResult);

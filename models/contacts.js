@@ -18,7 +18,7 @@ const contactSchema = new Schema(
       type: String,
       trim: true,
       lowercase: true,
-      unique: true,
+
       match: [
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         'Please fill a valid email address',
@@ -31,6 +31,7 @@ const contactSchema = new Schema(
         /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/, // значення має відповідати регуряреому виразу
       required: [true, 'Set   phone for contact'],
     },
+    avatarURL: { type: String },
     favorite: {
       type: Boolean,
       default: false,
