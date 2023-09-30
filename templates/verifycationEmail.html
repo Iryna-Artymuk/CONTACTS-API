@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+
+        background-color: #dbd4d4;
+        color: #0b0b0b;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #b7b1b1;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .header h1 {
+        color: #d50a0a;
+        font-size: 24px;
+        margin: 0;
+      }
+
+      .content {
+        font-size: 18px;
+
+        margin: 0px auto 30px;
+      }
+
+      .content p {
+        margin: 0 0 10px;
+        line-height: 1.5;
+      }
+      .content p span {
+        color: red;
+      }
+      .content a {
+        display: block;
+        width: 200px;
+
+        padding: 20px 15px;
+
+        color: inherit;
+        font-size: 24px;
+        font-weight: 500;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 20px;
+        background-color: #ee4b4b;
+        margin: 0 auto;
+      }
+      .content a:hover {
+        background-color: #f10b0b;
+        color: white;
+      }
+      .footer {
+        text-align: center;
+      }
+
+      .footer p {
+        font-size: 14px;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Greetings, {{username}}!</h1>
+      </div>
+      <div class="content">
+        <p>
+          We want to extend our warmest welcome to <span> My Contacts</span> and
+          express our deepest gratitude for taking the time to register on our
+          website. We truly appreciate your interest and involvement. As we move
+          forward, it is vital that we ensure the security and authenticity of
+          all our valued users. In line with that, we need to carry out an
+          important step that involves verifying your email address. This
+          procedure is simple yet indispensable in ensuring that you have a
+          secure and delightful experience on our platform.
+        </p>
+        <a href="{{verificationLink}}"> Verify email</a>
+      </div>
+      <div class="footer">
+        <p>Best regards,</p>
+        <p>The Team</p>
+      </div>
+    </div>
+  </body>
+</html>
