@@ -8,3 +8,4 @@ export { default as validateLoginUser } from './validateLoginUser.js';
 export { default as authentication } from './authentication.js';
 export { default as vadidateSubscription } from './validateSubscription.js';
 export { default as upload } from './upload.js';
+export { default as validateEmail } from './validateEmail.js';
